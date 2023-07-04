@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 4000;
 const mongodb = `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URL}:${process.env.MONGODB_PORT || '27017'}/${process.env.MONGODB_DBNAME}?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false`
 const ca = `${path.join(__dirname, `${ process.env.MONGODB_CERT || 'rds-combined-ca-bundle.pem'}`)}`
 
-//connect to aws documentdb
+//connect to aws documentdb 
 mongoose.connect(mongodb, {
     tlsCAFile: `${ca}`,
     useNewUrlParser: true,
