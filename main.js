@@ -3,11 +3,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const { escapeXML } = require('ejs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const mongodb = `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URL}:${process.env.MONGODB_PORT || '27017'}/${process.env.MONGODB_DBNAME}?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false`
+const ca = `${path.join(__dirname, `${ process.env.MONGODB_CERT || 'rds-combined-ca-bundle.pem'}`)}`
 
-mongoose.connect(process.env.DB_URI, {useNewUrlParser: true });
+//connect to aws documentdb
+mongoose.connect(mongodb, {
+    tlsCAFile: `${ca}`,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Connected to the database"));
